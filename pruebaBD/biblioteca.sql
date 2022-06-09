@@ -1,7 +1,6 @@
 DROP DATABASE biblioteca;
 
 CREATE DATABASE biblioteca;
-
 \c biblioteca
 
 CREATE TABLE comuna(

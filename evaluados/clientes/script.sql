@@ -29,7 +29,7 @@ BEGIN TRANSACTION;
 
 COMMIT;
 
-SAVE POINT transaccion1;
+
 --consulta stock del producto 9 después de la transacción
 SELECT descripcion,stock FROM producto WHERE id = 9;
 ----------------------------------------
@@ -54,17 +54,15 @@ BEGIN TRANSACTION;
     UPDATE producto SET stock = stock - 3 WHERE id = 1;
     INSERT INTO detalle_compra(id,producto_id,compra_id,cantidad) VALUES (45,2,34,3);
     UPDATE producto SET stock = stock - 3 WHERE id = 2;
-    SAVE POINT transaccion2; 
+    SAVEPOINT transaccion1;
     INSERT INTO detalle_compra(id,producto_id,compra_id,cantidad) VALUES (46,8,34,3);
     UPDATE producto SET stock = stock - 3 WHERE id = 8;
-
+    ROLLBACK TO transaccion1;
 COMMIT;
 
 --consulta stock de los productos 1, 2 y 8 despues de la transacción
 SELECT descripcion, stock FROM producto WHERE id = 1 OR id = 2 OR id = 8;
 ------------------------------------------------------------------------------
-SAVE POINT transaccion3;
-
 
 -- Realizar las siguientes consultas (2 Puntos):
 -- a. Deshabilitar el AUTOCOMMIT .
@@ -76,13 +74,15 @@ SAVE POINT transaccion3;
 -- f. Habilitar de nuevo el AUTOCOMMIT.
 
 -- desactiva el autocommit
+\echo :AUTOCOMMIT
+
 \set AUTOCOMMIT off
 
-BEGIN TRANSACTION;
-    INSERT INTO clientes(id,nombre,email) VALUES(11,usuario011,usuario011@hotmail.com)
-COMMIT;
-SELECT * FROM clientes
-ROLLBACK TO transaccion2
-SELECT * FROM clientes
+INSERT INTO cliente(id,nombre,email) VALUES(11,'usuario011','usuario011@hotmail.com');
 
-\set AUTOCOMMIT on 
+SELECT * FROM cliente;
+ROLLBACK;
+
+SELECT * FROM cliente;
+COMMIT;
+\set AUTOCOMMIT on
