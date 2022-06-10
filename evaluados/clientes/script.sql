@@ -23,8 +23,8 @@ SELECT descripcion,stock FROM producto WHERE id = 9;
 
 BEGIN TRANSACTION;
     
-    INSERT INTO compra(id,cliente_id,fecha) VALUES (33,(SELECT id FROM cliente WHERE nombre='usuario01'),Current_timestamp);
-    INSERT INTO detalle_compra(id,producto_id,compra_id,cantidad) VALUES (43,9,33,5);
+    INSERT INTO compra(cliente_id,fecha) VALUES ((SELECT id FROM cliente WHERE nombre='usuario01'),Current_timestamp);
+    INSERT INTO detalle_compra(producto_id,compra_id,cantidad) VALUES (9,(SELECT MAX(id) FROM compra),5);
     UPDATE producto SET stock = stock - 5 WHERE id = 9;
 
 COMMIT;
@@ -80,9 +80,9 @@ SELECT descripcion, stock FROM producto WHERE id = 1 OR id = 2 OR id = 8;
 
 INSERT INTO cliente(id,nombre,email) VALUES(11,'usuario011','usuario011@hotmail.com');
 
-SELECT * FROM cliente;
+SELECT * FROM cliente ORDER BY id;
 ROLLBACK;
 
-SELECT * FROM cliente;
+SELECT * FROM cliente ORDER BY id;
 COMMIT;
 \set AUTOCOMMIT on
