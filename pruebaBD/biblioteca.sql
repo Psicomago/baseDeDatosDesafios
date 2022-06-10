@@ -113,7 +113,8 @@ COMMIT;
 
 --a. Mostrar todos los libros que posean menos de 300 páginas. (0.5 puntos)
 
-SELECT isbn, titulo, paginas, autor.nombre || ' ' || autor.apellido AS autor
+SELECT isbn, titulo, paginas, autor.nombre || ' ' || autor.apellido AS autor,
+    (SELECT autor.nombre || ' ' || autor.apellido AS CO_AUTOR FROM AUTOR WHERE libros.id_coautor = codAutor )
     FROM libros 
     INNER JOIN autor ON id_autor = autor.codAutor
     WHERE paginas < 300;
