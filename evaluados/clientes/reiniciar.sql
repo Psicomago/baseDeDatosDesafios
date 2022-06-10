@@ -1,5 +1,6 @@
 -- este script(reiniciar.sql) reestablece los valores iniciales de las tablas,
--- para poder ejecutar el scripts de las consultas del desafío sin errores de duplicado
+-- antes de las transacciones, para poder ejecutar varias veces, el scripts 
+-- de las transaccione y consultas sin errores de duplicado
 
 UPDATE producto SET stock = stock + 5 WHERE id = 9;
 UPDATE producto SET stock = stock + 3 WHERE id = 1;

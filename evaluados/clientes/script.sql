@@ -49,13 +49,13 @@ SELECT descripcion, stock FROM producto WHERE id = 1 OR id = 2 OR id = 8;
 
 BEGIN TRANSACTION;
     
-    INSERT INTO compra(id,cliente_id,fecha) VALUES (34,(SELECT id FROM cliente WHERE nombre='usuario02'),Current_timestamp);
-    INSERT INTO detalle_compra(id,producto_id,compra_id,cantidad) VALUES (44,1,34,3);
+    INSERT INTO compra(cliente_id,fecha) VALUES ((SELECT id FROM cliente WHERE nombre='usuario02'),Current_timestamp);
+    INSERT INTO detalle_compra(producto_id,compra_id,cantidad) VALUES (1,(SELECT MAX(id) FROM compra),3);
     UPDATE producto SET stock = stock - 3 WHERE id = 1;
-    INSERT INTO detalle_compra(id,producto_id,compra_id,cantidad) VALUES (45,2,34,3);
+    INSERT INTO detalle_compra(producto_id,compra_id,cantidad) VALUES (2,(SELECT MAX(id) FROM compra),3);
     UPDATE producto SET stock = stock - 3 WHERE id = 2;
     SAVEPOINT transaccion1;
-    INSERT INTO detalle_compra(id,producto_id,compra_id,cantidad) VALUES (46,8,34,3);
+    INSERT INTO detalle_compra(producto_id,compra_id,cantidad) VALUES (8,(SELECT MAX(id) FROM compra),3);
     UPDATE producto SET stock = stock - 3 WHERE id = 8;
     ROLLBACK TO transaccion1;
 COMMIT;
