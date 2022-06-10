@@ -134,8 +134,19 @@ SELECT id_libro AS ISBN, (SELECT titulo FROM libros WHERE prestamo.id_libro = is
 --d. Si se cobrara una multa de $100 por cada día de atraso, 
 -- mostrar cuánto debería pagar cada usuario que entregue el préstamo después de 7 días. (0.5 puntos)
 
+--- Qwery muestra la multa por atraso de cada usuario usuario 
 SELECT id_socio, (SELECT nombre || ' ' || apellido FROM socios WHERE id_socio = rut) AS SOCIO,
-        (SELECT titulo FROM libros WHERE isbn = id_libro) AS LIBRO_PRESTADO,
-        fecha_inicio AS INICIO_PRESTAMO, fecha_termino AS FECHA_DEVOLUCION, ((fecha_termino - fecha_inicio) - 7) AS DIAS_DE_RETRASO,
-        ((fecha_termino - fecha_inicio)-7) * 100 AS MULTA_POR_ATRASO
-    FROM prestamo WHERE (fecha_termino - fecha_inicio) > 7;
+        SUM((fecha_termino - fecha_inicio) - 7) AS DIAS_DE_RETRASO,
+        SUM((fecha_termino - fecha_inicio)-7) * 100 AS MULTA_POR_ATRASO
+    FROM prestamo WHERE (fecha_termino - fecha_inicio) > 7 GROUP BY id_socio ORDER BY DIAS_DE_RETRASO;
+
+
+-- BONUS TRACK
+-- Qwery que muestra la multa por atraso por cada usuario y cada libro. 
+-- SELECT id_socio, (SELECT nombre || ' ' || apellido FROM socios WHERE id_socio = rut) AS SOCIO,
+--         (SELECT titulo FROM libros WHERE isbn = id_libro) AS LIBRO_PRESTADO,
+--         fecha_inicio AS INICIO_PRESTAMO, fecha_termino AS FECHA_DEVOLUCION, ((fecha_termino - fecha_inicio) - 7) AS DIAS_DE_RETRASO,
+--         ((fecha_termino - fecha_inicio)-7) * 100 AS MULTA_POR_ATRASO
+--     FROM prestamo WHERE ((fecha_termino - fecha_inicio) > 7) ORDER BY id_socio;
+
+
