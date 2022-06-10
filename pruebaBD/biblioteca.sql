@@ -136,6 +136,6 @@ SELECT id_libro AS ISBN, (SELECT titulo FROM libros WHERE prestamo.id_libro = is
 
 SELECT id_socio, (SELECT nombre || ' ' || apellido FROM socios WHERE id_socio = rut) AS SOCIO,
         (SELECT titulo FROM libros WHERE isbn = id_libro) AS LIBRO_PRESTADO,
-        fecha_inicio AS INICIO_PRESTAMO, fecha_termino AS FECHA_DEVOLUCION, fecha_termino - fecha_inicio AS DIAS_DE_RETRASO,
-        (fecha_termino - fecha_inicio) * 100 AS MULTA_POR_ATRASO
+        fecha_inicio AS INICIO_PRESTAMO, fecha_termino AS FECHA_DEVOLUCION, ((fecha_termino - fecha_inicio) - 7) AS DIAS_DE_RETRASO,
+        ((fecha_termino - fecha_inicio)-7) * 100 AS MULTA_POR_ATRASO
     FROM prestamo WHERE (fecha_termino - fecha_inicio) > 7;
